@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Pusher : MonoBehaviour
 {
-    [SerializeField] private PlayerController playerController;
+    [SerializeField] private PlayerMovement playerMovement;
 
     private void OnTriggerEnter(Collider other)
     {
@@ -12,7 +12,7 @@ public class Pusher : MonoBehaviour
             return;
 
         Box box = other.GetComponent<Box>();
-        if (box.CanPush(playerController.MovementInput))
-            playerController.PushObject(box);
+        if (box.CanPush(playerMovement.MovementInput))
+            playerMovement.PushObject(box);
     }
 }

@@ -27,9 +27,17 @@ public class @Player : IInputActionCollection, IDisposable
                     ""interactions"": """"
                 },
                 {
-                    ""name"": ""Debug"",
+                    ""name"": ""LongJump"",
                     ""type"": ""Button"",
                     ""id"": ""2fc34433-d286-48fa-ac48-51e113d9d9e3"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""ShortJump"",
+                    ""type"": ""Button"",
+                    ""id"": ""ff37075b-96e4-49ad-b2b4-fb24f268a6c3"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
@@ -109,7 +117,18 @@ public class @Player : IInputActionCollection, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Debug"",
+                    ""action"": ""LongJump"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""4ca5bc81-ea77-4192-9d17-9a7f6bb2d448"",
+                    ""path"": ""<Keyboard>/enter"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ShortJump"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -121,7 +140,8 @@ public class @Player : IInputActionCollection, IDisposable
         // PlayerActions
         m_PlayerActions = asset.FindActionMap("PlayerActions", throwIfNotFound: true);
         m_PlayerActions_Move = m_PlayerActions.FindAction("Move", throwIfNotFound: true);
-        m_PlayerActions_Debug = m_PlayerActions.FindAction("Debug", throwIfNotFound: true);
+        m_PlayerActions_LongJump = m_PlayerActions.FindAction("LongJump", throwIfNotFound: true);
+        m_PlayerActions_ShortJump = m_PlayerActions.FindAction("ShortJump", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -172,13 +192,15 @@ public class @Player : IInputActionCollection, IDisposable
     private readonly InputActionMap m_PlayerActions;
     private IPlayerActionsActions m_PlayerActionsActionsCallbackInterface;
     private readonly InputAction m_PlayerActions_Move;
-    private readonly InputAction m_PlayerActions_Debug;
+    private readonly InputAction m_PlayerActions_LongJump;
+    private readonly InputAction m_PlayerActions_ShortJump;
     public struct PlayerActionsActions
     {
         private @Player m_Wrapper;
         public PlayerActionsActions(@Player wrapper) { m_Wrapper = wrapper; }
         public InputAction @Move => m_Wrapper.m_PlayerActions_Move;
-        public InputAction @Debug => m_Wrapper.m_PlayerActions_Debug;
+        public InputAction @LongJump => m_Wrapper.m_PlayerActions_LongJump;
+        public InputAction @ShortJump => m_Wrapper.m_PlayerActions_ShortJump;
         public InputActionMap Get() { return m_Wrapper.m_PlayerActions; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -191,9 +213,12 @@ public class @Player : IInputActionCollection, IDisposable
                 @Move.started -= m_Wrapper.m_PlayerActionsActionsCallbackInterface.OnMove;
                 @Move.performed -= m_Wrapper.m_PlayerActionsActionsCallbackInterface.OnMove;
                 @Move.canceled -= m_Wrapper.m_PlayerActionsActionsCallbackInterface.OnMove;
-                @Debug.started -= m_Wrapper.m_PlayerActionsActionsCallbackInterface.OnDebug;
-                @Debug.performed -= m_Wrapper.m_PlayerActionsActionsCallbackInterface.OnDebug;
-                @Debug.canceled -= m_Wrapper.m_PlayerActionsActionsCallbackInterface.OnDebug;
+                @LongJump.started -= m_Wrapper.m_PlayerActionsActionsCallbackInterface.OnLongJump;
+                @LongJump.performed -= m_Wrapper.m_PlayerActionsActionsCallbackInterface.OnLongJump;
+                @LongJump.canceled -= m_Wrapper.m_PlayerActionsActionsCallbackInterface.OnLongJump;
+                @ShortJump.started -= m_Wrapper.m_PlayerActionsActionsCallbackInterface.OnShortJump;
+                @ShortJump.performed -= m_Wrapper.m_PlayerActionsActionsCallbackInterface.OnShortJump;
+                @ShortJump.canceled -= m_Wrapper.m_PlayerActionsActionsCallbackInterface.OnShortJump;
             }
             m_Wrapper.m_PlayerActionsActionsCallbackInterface = instance;
             if (instance != null)
@@ -201,9 +226,12 @@ public class @Player : IInputActionCollection, IDisposable
                 @Move.started += instance.OnMove;
                 @Move.performed += instance.OnMove;
                 @Move.canceled += instance.OnMove;
-                @Debug.started += instance.OnDebug;
-                @Debug.performed += instance.OnDebug;
-                @Debug.canceled += instance.OnDebug;
+                @LongJump.started += instance.OnLongJump;
+                @LongJump.performed += instance.OnLongJump;
+                @LongJump.canceled += instance.OnLongJump;
+                @ShortJump.started += instance.OnShortJump;
+                @ShortJump.performed += instance.OnShortJump;
+                @ShortJump.canceled += instance.OnShortJump;
             }
         }
     }
@@ -211,6 +239,7 @@ public class @Player : IInputActionCollection, IDisposable
     public interface IPlayerActionsActions
     {
         void OnMove(InputAction.CallbackContext context);
-        void OnDebug(InputAction.CallbackContext context);
+        void OnLongJump(InputAction.CallbackContext context);
+        void OnShortJump(InputAction.CallbackContext context);
     }
 }

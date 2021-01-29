@@ -14,9 +14,17 @@
                     "interactions": ""
                 },
                 {
-                    "name": "Debug",
+                    "name": "LongJump",
                     "type": "Button",
                     "id": "2fc34433-d286-48fa-ac48-51e113d9d9e3",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "ShortJump",
+                    "type": "Button",
+                    "id": "ff37075b-96e4-49ad-b2b4-fb24f268a6c3",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": ""
@@ -96,7 +104,18 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Debug",
+                    "action": "LongJump",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "4ca5bc81-ea77-4192-9d17-9a7f6bb2d448",
+                    "path": "<Keyboard>/enter",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ShortJump",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
