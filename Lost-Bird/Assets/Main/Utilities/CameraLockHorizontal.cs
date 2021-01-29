@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
+using Cinemachine;
 
 namespace CFLFramework.Utilities.Cameras
 {
-    [RequireComponent(typeof(Camera))]
     public class CameraLockHorizontal : MonoBehaviour
     {
         #region FIELDS
@@ -40,8 +40,8 @@ namespace CFLFramework.Utilities.Cameras
 
         private void SetCameraSize()
         {
-            Camera camera = GetComponent<Camera>();
-            camera.orthographicSize = (desiredHorizontalSize / 2) / camera.aspect;
+            CinemachineVirtualCamera camera = GetComponent<CinemachineVirtualCamera>();
+            camera.m_Lens.OrthographicSize = (desiredHorizontalSize / 2) / camera.m_Lens.Aspect;
         }
 
         #endregion

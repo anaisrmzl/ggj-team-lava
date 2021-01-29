@@ -9,8 +9,10 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float playerSpeed = 2.0f;
     [SerializeField] private float pushingSpeed = 3.0f;
     [SerializeField] private float gravityValue = -9.81f;
-    //[SerializeField] private Animator animator = null;
+    [SerializeField] private float jumpHeight = -1.0f;
 
+    //[SerializeField] private Animator animator = null;
+    private bool groundedPlayer = true;
     private Player playerInput = null;
     private CharacterController controller = null;
     private Vector3 playerVelocity;
@@ -88,11 +90,22 @@ public class PlayerController : MonoBehaviour
             return;
         }
 
+        groundedPlayer = controller.isGrounded;
+        if (groundedPlayer && playerVelocity.y < 0)
+        {
+            playerVelocity.y = 0f;
+        }
+
         Vector3 move = new Vector3(MovementInput.x, 0, MovementInput.y);
         controller.Move(move * Time.deltaTime * playerSpeed);
 
         if (move != Vector3.zero)
             gameObject.transform.forward = move;
+
+        if (playerInput.PlayerActions.Debug.triggered && groundedPlayer)
+        {
+            playerVelocity.y += Mathf.Sqrt(jumpHeight * gravityValue);
+        }
 
         playerVelocity.y += gravityValue * Time.deltaTime;
         controller.Move(playerVelocity * Time.deltaTime);
@@ -101,8 +114,9 @@ public class PlayerController : MonoBehaviour
     public void PushObject(Box box)
     {
         changedDirection = false;
-        endPosition = box.transform.parent.transform.position;
-        transform.position = box.PushOrigin;
+        Vector3 boxParentPosition = box.transform.parent.transform.position;
+        endPosition = new Vector3(boxParentPosition.x, transform.position.y, boxParentPosition.z);
+        transform.position = new Vector3(box.PushOrigin.x, transform.position.y, box.PushOrigin.z);
         box.transform.parent.SetParent(transform);
         movingBox = box;
         pushing = true;
