@@ -9,6 +9,7 @@ public class PlayerMovement : MonoBehaviour
     [Header("BIRD")]
     [SerializeField] private GameObject bird = null;
     [SerializeField] private Collector collector = null;
+    [SerializeField] private Animator birdAnimator = null;
 
     [Header("PLAYER MOVEMENT")]
     [SerializeField] private float playerSpeed = 2.0f;
@@ -92,10 +93,9 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
-        if (startedPushing)
-            animator.SetFloat("speed", 0.0f);
-        else
-            animator.SetFloat("speed", Mathf.Abs(MovementInput.x) + Mathf.Abs(MovementInput.y));
+
+        animator.SetFloat("speed", startedPushing ? 0.0f : Mathf.Abs(MovementInput.x) + Mathf.Abs(MovementInput.y));
+        birdAnimator.SetFloat("speed", startedPushing ? 0.0f : Mathf.Abs(MovementInput.x) + Mathf.Abs(MovementInput.y));
 
         if (elevating || traveling)
         {
@@ -161,6 +161,7 @@ public class PlayerMovement : MonoBehaviour
         elevating = true;
         travelTimer = 0.0f;
         animator.SetBool("jump", elevating);
+        birdAnimator.SetBool("jump", elevating);
         rigidbody.useGravity = false;
     }
 
@@ -200,6 +201,7 @@ public class PlayerMovement : MonoBehaviour
         rigidbody.useGravity = true;
         travelTimer = 0.0f;
         animator.SetBool("jump", elevating);
+        birdAnimator.SetBool("jump", elevating);
     }
 
     private void Push()
