@@ -1,10 +1,14 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class Pusher : MonoBehaviour
 {
+    #region FIELDS
+
     [SerializeField] private PlayerMovement playerMovement;
+
+    #endregion
+
+    #region BEHAVIOR
 
     private void OnTriggerEnter(Collider other)
     {
@@ -15,4 +19,6 @@ public class Pusher : MonoBehaviour
         if (box.CanPush(playerMovement.MovementInput))
             playerMovement.PushObject(box);
     }
+
+    #endregion
 }

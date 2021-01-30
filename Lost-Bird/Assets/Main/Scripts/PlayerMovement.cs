@@ -1,12 +1,13 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
     #region FIELDS
 
     private const float MinMovingDistance = 0.001f;
+
+    [Header("BIRD")]
+    [SerializeField] private GameObject bird = null;
 
     [Header("PLAYER MOVEMENT")]
     [SerializeField] private float playerSpeed = 2.0f;
@@ -41,6 +42,7 @@ public class PlayerMovement : MonoBehaviour
     #region PROPERTIES
 
     public Vector2 MovementInput { get => playerInput.PlayerActions.Move.ReadValue<Vector2>(); }
+    public bool HasBird { get; private set; } = true;
 
     #endregion
 
@@ -94,12 +96,8 @@ public class PlayerMovement : MonoBehaviour
             return;
         }
 
-        if (playerInput.PlayerActions.ShortJump.triggered)//Change to autoTrigger
-            SetElevation(transform.position + new Vector3(0.0f, 0.5f, 0.0f), shortLength);
-
-
         if (playerInput.PlayerActions.LongJump.triggered)//Change to autoTrigger
-            SetElevation(transform.position + new Vector3(0.0f, 1.0f, 0.0f), longLength);
+            SetElevation(transform.position + new Vector3(0.0f, HasBird ? 1.0f : 0.5f, 0.0f), HasBird ? longLength : shortLength);
 
         Vector3 move = new Vector3(MovementInput.x, 0, MovementInput.y);
         if (move != Vector3.zero)
@@ -124,6 +122,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void SetElevation(Vector3 elevation, float traveling)
     {
+        //if bird, change his animation
         elevationPosition = elevation;
         travelLength = traveling;
         elevating = true;
@@ -151,6 +150,7 @@ public class PlayerMovement : MonoBehaviour
         {
             traveling = false;
             transform.position = travelingPosition;
+            //if bird, change his animation
             rigidbody.useGravity = true;
         }
     }
@@ -178,6 +178,17 @@ public class PlayerMovement : MonoBehaviour
         box.transform.parent.SetParent(transform);
         movingBox = box;
         pushing = true;
+    }
+
+    public void LooseBird()
+    {
+        HasBird = false;
+        UpdateBird();
+    }
+
+    private void UpdateBird()
+    {
+        bird.SetActive(HasBird);
     }
 
     #endregion
