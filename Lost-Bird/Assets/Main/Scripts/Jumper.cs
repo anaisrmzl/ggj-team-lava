@@ -19,6 +19,7 @@ public class Jumper : MonoBehaviour
             return;
 
         Edge edge = other.GetComponent<Edge>();
+        Debug.Log(edge.AreThereObjects());
         if (!edge.AreThereObjects() && Vector3.Angle(edge.Direction, playerMovement.transform.forward) <= 45.0f)
             playerMovement.Jump(edge);
     }

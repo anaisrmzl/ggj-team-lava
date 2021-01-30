@@ -81,13 +81,19 @@ public class PlayerMovement : MonoBehaviour
         if (!CanMove)
             return;
 
+        if (startedPushing)
+            return;
+
         Vector3 move = new Vector3(MovementInput.x, 0, MovementInput.y);
         rigidbody.MovePosition(rigidbody.position + move * playerSpeed * Time.fixedDeltaTime);
     }
 
     private void Update()
     {
-        animator.SetFloat("speed", Mathf.Abs(MovementInput.x) + Mathf.Abs(MovementInput.y));
+        if (startedPushing)
+            animator.SetFloat("speed", 0.0f);
+        else
+            animator.SetFloat("speed", Mathf.Abs(MovementInput.x) + Mathf.Abs(MovementInput.y));
 
         if (pushing)
         {
