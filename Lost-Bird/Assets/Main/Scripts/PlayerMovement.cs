@@ -16,6 +16,7 @@ public class PlayerMovement : MonoBehaviour
 
     [Header("PUSH")]
     [SerializeField] private float pushingSpeed = 3.0f;
+    [SerializeField] private Pusher pusher = null;
 
     [Header("JUMPS")]
     [SerializeField] private float shortLength = 2.0f;
@@ -28,7 +29,7 @@ public class PlayerMovement : MonoBehaviour
     private Vector3 playerVelocity;
 
     private bool pushing = false;
-    private bool changedDirection = false;
+    private bool startedPushing = false;
     private GameObject objectToPush = null;
     private Vector3 endPosition;
     private Box movingBox = null;
@@ -47,6 +48,8 @@ public class PlayerMovement : MonoBehaviour
     public Vector2 MovementInput { get => playerInput.PlayerActions.Move.ReadValue<Vector2>(); }
     public bool HasBird { get; private set; }
     public bool CanMove { get => !elevating && !pushing && !traveling; }
+    public bool IsJumping { get => elevating || traveling; }
+    public bool CanPush { get => !startedPushing; }
 
     #endregion
 
@@ -62,15 +65,15 @@ public class PlayerMovement : MonoBehaviour
     private void OnEnable()
     {
         playerInput.Enable();
-        playerInput.PlayerActions.Move.performed += action => PerformedAction();
+        playerInput.PlayerActions.Move.started += action => StartedAction();
         playerInput.PlayerActions.Move.canceled += action => CanceledAction();
     }
 
     private void OnDisable()
     {
         playerInput.Disable();
+        playerInput.PlayerActions.Move.started += action => StartedAction();
         playerInput.PlayerActions.Move.canceled -= action => CanceledAction();
-        playerInput.PlayerActions.Move.performed -= action => PerformedAction();
     }
 
     private void FixedUpdate()
@@ -112,14 +115,22 @@ public class PlayerMovement : MonoBehaviour
             gameObject.transform.forward = move;
     }
 
-    private void PerformedAction()
+    public void Jump(Edge edge)
     {
-        changedDirection = true;
+        transform.position = new Vector3(edge.TileCenter.x, transform.position.y, edge.TileCenter.z);
+        gameObject.transform.forward = edge.Direction;
+        SetElevation(transform.position + new Vector3(0.0f, HasBird ? 1.0f : 0.5f, 0.0f), HasBird ? longLength : shortLength, HasBird ? longJumpSpeed : shortJumpSpeed);
     }
 
     private void CanceledAction()
     {
-        changedDirection = true;
+        startedPushing = false;
+    }
+
+    private void StartedAction()
+    {
+        if (movingBox != null && movingBox == pusher.CollidingBox)
+            pusher.TryPush(movingBox, transform.forward);
     }
 
     private void SetElevation(Vector3 elevation, float traveling, float duration)
@@ -149,6 +160,7 @@ public class PlayerMovement : MonoBehaviour
     private void Travel()
     {
         float step = jumpSpeed * Time.deltaTime;
+        Vector3 lastPosition = transform.position;
         transform.position = Vector3.MoveTowards(transform.position, travelingPosition, step);
         if (Vector3.Distance(transform.position, travelingPosition) < MinMovingDistance)
         {
@@ -169,16 +181,12 @@ public class PlayerMovement : MonoBehaviour
             pushing = false;
             transform.position = endPosition;
             movingBox.transform.parent.SetParent(null);
-            if (!changedDirection && movingBox.CanPush(MovementInput))
-                PushObject(movingBox);
-            else
-                animator.SetBool("push", pushing);
+            animator.SetBool("push", pushing);
         }
     }
 
     private void PushObject(Box box)
     {
-        changedDirection = false;
         Vector3 boxParentPosition = box.transform.parent.transform.position;
         endPosition = new Vector3(boxParentPosition.x, transform.position.y, boxParentPosition.z);
         transform.position = new Vector3(box.PushOrigin.x, transform.position.y, box.PushOrigin.z);
@@ -189,6 +197,7 @@ public class PlayerMovement : MonoBehaviour
 
     public void StartPushing(Box box)
     {
+        startedPushing = true;
         PushObject(box);
         animator.SetBool("push", pushing);
     }
