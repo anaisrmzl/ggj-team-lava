@@ -43,6 +43,7 @@ public class PlayerMovement : MonoBehaviour
     private bool elevating = false;
     private bool traveling = false;
     private float travelTimer = 0.0f;
+    private Vector3 currentEdgeCenter;
 
     #endregion
 
@@ -126,9 +127,6 @@ public class PlayerMovement : MonoBehaviour
             return;
         }
 
-        if (playerInput.PlayerActions.LongJump.triggered)//Change to autoTrigger
-            SetElevation(transform.position + new Vector3(0.0f, HasBird ? 1.0f : 0.5f, 0.0f), HasBird ? longLength : shortLength, HasBird ? longJumpSpeed : shortJumpSpeed);
-
         Vector3 move = new Vector3(MovementInput.x, 0, MovementInput.y);
         if (move != Vector3.zero)
             gameObject.transform.forward = move;
@@ -136,7 +134,7 @@ public class PlayerMovement : MonoBehaviour
 
     public void Jump(Edge edge)
     {
-        transform.position = new Vector3(edge.TileCenter.x, transform.position.y, edge.TileCenter.z);
+        currentEdgeCenter = edge.TileCenter;
         gameObject.transform.forward = edge.Direction;
         SetElevation(transform.position + new Vector3(0.0f, HasBird ? 1.0f : 0.5f, 0.0f), HasBird ? longLength : shortLength, HasBird ? longJumpSpeed : shortJumpSpeed);
     }
@@ -154,7 +152,6 @@ public class PlayerMovement : MonoBehaviour
 
     private void SetElevation(Vector3 elevation, float traveling, float duration)
     {
-        //if bird, change his animation
         jumpSpeed = duration;
         elevationPosition = elevation;
         travelLength = traveling;
@@ -179,7 +176,8 @@ public class PlayerMovement : MonoBehaviour
         if (!canceled)
             transform.position = elevationPosition;
 
-        travelingPosition = transform.position + transform.forward * travelLength;
+        Vector3 destination = new Vector3(currentEdgeCenter.x, transform.position.y, currentEdgeCenter.z);
+        travelingPosition = destination + transform.forward * travelLength;
         traveling = true;
     }
 
@@ -197,7 +195,7 @@ public class PlayerMovement : MonoBehaviour
         traveling = false;
         if (!canceled)
             transform.position = travelingPosition;
-        //if bird, change his animation
+
         rigidbody.useGravity = true;
         travelTimer = 0.0f;
         animator.SetBool("jump", elevating);

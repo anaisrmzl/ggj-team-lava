@@ -9,7 +9,7 @@ public class Box : MonoBehaviour
     [SerializeField] private BoxMain boxMain;
     [SerializeField] private Vector3 origin;
 
-    private float minForce = 0.8f;
+    private float minForce = 0.5f;
 
     public BoxSide BoxSide { get => boxSide; }
     public Vector3 PushOrigin { get => transform.parent.position + origin; }
