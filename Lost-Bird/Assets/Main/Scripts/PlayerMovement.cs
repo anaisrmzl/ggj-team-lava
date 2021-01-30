@@ -23,6 +23,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float longLength = 3.0f;
     [SerializeField] private float shortJumpSpeed = 7.0f;
     [SerializeField] private float longJumpSpeed = 7.0f;
+    [SerializeField] private float maxTravelTime = 2.0f;
 
     private Player playerInput = null;
     private new Rigidbody rigidbody = null;
@@ -40,6 +41,7 @@ public class PlayerMovement : MonoBehaviour
     private float jumpSpeed = default(float);
     private bool elevating = false;
     private bool traveling = false;
+    private float travelTimer = 0.0f;
 
     #endregion
 
@@ -95,6 +97,17 @@ public class PlayerMovement : MonoBehaviour
         else
             animator.SetFloat("speed", Mathf.Abs(MovementInput.x) + Mathf.Abs(MovementInput.y));
 
+        if (elevating || traveling)
+        {
+            travelTimer += Time.deltaTime;
+            if (travelTimer >= maxTravelTime)
+            {
+                FinishElevate(true);
+                FinishTravel(true);
+                return;
+            }
+        }
+
         if (pushing)
         {
             Push();
@@ -146,6 +159,7 @@ public class PlayerMovement : MonoBehaviour
         elevationPosition = elevation;
         travelLength = traveling;
         elevating = true;
+        travelTimer = 0.0f;
         animator.SetBool("jump", elevating);
         rigidbody.useGravity = false;
     }
@@ -155,12 +169,17 @@ public class PlayerMovement : MonoBehaviour
         float step = jumpSpeed * Time.deltaTime;
         transform.position = Vector3.MoveTowards(transform.position, elevationPosition, step);
         if (Vector3.Distance(transform.position, elevationPosition) < MinMovingDistance)
-        {
-            elevating = false;
+            FinishElevate();
+    }
+
+    private void FinishElevate(bool canceled = false)
+    {
+        elevating = false;
+        if (!canceled)
             transform.position = elevationPosition;
-            travelingPosition = transform.position + transform.forward * travelLength;
-            traveling = true;
-        }
+
+        travelingPosition = transform.position + transform.forward * travelLength;
+        traveling = true;
     }
 
     private void Travel()
@@ -169,13 +188,18 @@ public class PlayerMovement : MonoBehaviour
         Vector3 lastPosition = transform.position;
         transform.position = Vector3.MoveTowards(transform.position, travelingPosition, step);
         if (Vector3.Distance(transform.position, travelingPosition) < MinMovingDistance)
-        {
-            traveling = false;
+            FinishTravel();
+    }
+
+    private void FinishTravel(bool canceled = false)
+    {
+        traveling = false;
+        if (!canceled)
             transform.position = travelingPosition;
-            //if bird, change his animation
-            rigidbody.useGravity = true;
-            animator.SetBool("jump", elevating);
-        }
+        //if bird, change his animation
+        rigidbody.useGravity = true;
+        travelTimer = 0.0f;
+        animator.SetBool("jump", elevating);
     }
 
     private void Push()
