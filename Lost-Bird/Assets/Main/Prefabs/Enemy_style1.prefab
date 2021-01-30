@@ -12,9 +12,10 @@ GameObject:
   - component: {fileID: 4343912631030627347}
   - component: {fileID: 4343912631030627344}
   - component: {fileID: 4343912631030627345}
-  m_Layer: 0
-  m_Name: Enemy
-  m_TagString: Untagged
+  - component: {fileID: 131204898801958161}
+  m_Layer: 13
+  m_Name: Enemy_style1
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -93,3 +94,16 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &131204898801958161
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4343912631030627359}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c9b6cdb05bc7d433e8e0c4b238ecbfa6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hasBird: 0

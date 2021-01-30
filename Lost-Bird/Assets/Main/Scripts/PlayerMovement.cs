@@ -8,6 +8,7 @@ public class PlayerMovement : MonoBehaviour
 
     [Header("BIRD")]
     [SerializeField] private GameObject bird = null;
+    [SerializeField] private Collector collector = null;
 
     [Header("PLAYER MOVEMENT")]
     [SerializeField] private float playerSpeed = 2.0f;
@@ -55,7 +56,7 @@ public class PlayerMovement : MonoBehaviour
     {
         playerInput = new Player();
         rigidbody = GetComponent<Rigidbody>();
-        FreeBird();
+        LooseBird();
     }
 
     private void OnEnable()
@@ -198,16 +199,39 @@ public class PlayerMovement : MonoBehaviour
         UpdateBird();
     }
 
-    public void FreeBird()
+    public bool FreeBird()
     {
+        if (!collector.HasKey)
+            return false;
+
         HasBird = true;
+        collector.UseKey();
         UpdateBird();
+        return true;
     }
 
     private void UpdateBird()
     {
         bird.SetActive(HasBird);
         animator.SetBool("bird", HasBird);
+    }
+
+    private void OnCollisionEnter(Collision other)
+    {
+        if (other.gameObject.GetComponent<BoxMain>() == null)
+            return;
+
+        BoxMain box = other.gameObject.GetComponent<BoxMain>();
+        box.FreezeConstraints(true);
+    }
+
+    private void OnCollisionExit(Collision other)
+    {
+        if (other.gameObject.GetComponent<BoxMain>() == null)
+            return;
+
+        BoxMain box = other.gameObject.GetComponent<BoxMain>();
+        box.FreezeConstraints(false);
     }
 
     #endregion

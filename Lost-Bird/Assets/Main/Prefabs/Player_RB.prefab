@@ -26,8 +26,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4724571997909525633}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.35, z: 0.35}
-  m_LocalScale: {x: 0.5, y: 0.35, z: 0.35}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4724571998260789726}
   m_RootOrder: 1
@@ -71,6 +71,7 @@ GameObject:
   - component: {fileID: 4724571998260789721}
   - component: {fileID: 4724571998260789722}
   - component: {fileID: 4724571998260789723}
+  - component: {fileID: 8521571968300323078}
   - component: {fileID: 4724571998260789725}
   m_Layer: 8
   m_Name: Player_RB
@@ -139,6 +140,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bird: {fileID: 7243633562786538206}
+  collector: {fileID: 8521571968300323078}
   playerSpeed: 2
   animator: {fileID: 6783023201223999126}
   pushingSpeed: 3
@@ -146,6 +148,18 @@ MonoBehaviour:
   longLength: 3
   shortJumpSpeed: 5
   longJumpSpeed: 2.5
+--- !u!114 &8521571968300323078
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4724571998260789716}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18828edebece44c17a448b79b6395ce1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!96 &4724571998260789725
 TrailRenderer:
   serializedVersion: 2

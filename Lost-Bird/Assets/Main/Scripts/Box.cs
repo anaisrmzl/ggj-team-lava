@@ -6,7 +6,7 @@ public class Box : MonoBehaviour
 
     [SerializeField] private Box opposite = null;
     [SerializeField] private BoxSide boxSide;
-    [SerializeField] private Rigidbody boxRigidbody;
+    // [SerializeField] private Rigidbody boxRigidbody;
     [SerializeField] private Vector3 origin;
 
     private float minForce = 0.8f;
@@ -57,26 +57,11 @@ public class Box : MonoBehaviour
 
         for (int i = 0; i < hits.Length; i++)
         {
-            Debug.Log(hits[i].transform.gameObject.name);
             if (hits[i].transform == transform.parent && hits.Length == 1)
                 return false;
-
         }
 
         return true;
-    }
-
-    public void FreezeConstraints(bool status)
-    {
-        if (status)
-        {
-            boxRigidbody.constraints = RigidbodyConstraints.FreezeAll;
-        }
-        else
-        {
-            boxRigidbody.constraints = RigidbodyConstraints.None;
-            boxRigidbody.constraints = RigidbodyConstraints.FreezeRotation;
-        }
     }
 
     #endregion

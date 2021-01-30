@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 412171172959114271}
   - component: {fileID: 412171172959114270}
   - component: {fileID: 412171172959114265}
+  - component: {fileID: 2444531086181395182}
   - component: {fileID: 412171172959114264}
   m_Layer: 11
   m_Name: Box
@@ -98,6 +99,19 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &2444531086181395182
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 412171172959114266}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9e4a58c0b2b3a4880999cbcca21785fb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  boxRigidbody: {fileID: 412171172959114264}
 --- !u!54 &412171172959114264
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -173,7 +187,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   opposite: {fileID: 3604966672350365946}
   boxSide: 3
-  boxRigidbody: {fileID: 412171172959114264}
   origin: {x: 1, y: 0, z: 0}
 --- !u!1 &3310835700662697625
 GameObject:
@@ -234,7 +247,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   opposite: {fileID: 5142572890800336510}
   boxSide: 1
-  boxRigidbody: {fileID: 412171172959114264}
   origin: {x: 0, y: 0, z: -1}
 --- !u!1 &6140354037176047206
 GameObject:
@@ -295,7 +307,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   opposite: {fileID: 859978487164195510}
   boxSide: 0
-  boxRigidbody: {fileID: 412171172959114264}
   origin: {x: 0, y: 0, z: 1}
 --- !u!1 &8349849946418065249
 GameObject:
@@ -356,5 +367,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   opposite: {fileID: 4846009901633033762}
   boxSide: 2
-  boxRigidbody: {fileID: 412171172959114264}
   origin: {x: -1, y: 0, z: 0}
