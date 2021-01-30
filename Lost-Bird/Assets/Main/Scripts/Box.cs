@@ -1,28 +1,22 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class Box : MonoBehaviour
 {
+    #region FIELDS
+
     [SerializeField] private Box opposite = null;
     [SerializeField] private BoxSide boxSide;
+    [SerializeField] private Rigidbody boxRigidbody;
     [SerializeField] private Vector3 origin;
 
     private float minForce = 0.8f;
 
-    public bool IsColliding { get; private set; }
     public BoxSide BoxSide { get => boxSide; }
     public Vector3 PushOrigin { get => transform.parent.position + origin; }
 
-    private void OnTriggerEnter(Collider other)
-    {
-        IsColliding = true;
-    }
+    #endregion
 
-    private void OnTriggerExit(Collider other)
-    {
-        IsColliding = false;
-    }
+    #region BEHAVIORS
 
     public bool CanPush(Vector2 force)
     {
@@ -46,6 +40,44 @@ public class Box : MonoBehaviour
                 break;
         }
 
-        return !opposite.IsColliding;
+        return !opposite.IsThereObjects();
     }
+
+    private void Update()
+    {
+        Debug.DrawRay(transform.parent.transform.position, transform.TransformDirection(Vector3.forward) * 1, Color.green);
+    }
+
+    public bool IsThereObjects()
+    {
+        RaycastHit[] hits;
+        hits = Physics.RaycastAll(transform.parent.transform.position, transform.TransformDirection(Vector3.forward), 1.0f);
+        if (hits.Length <= 0)
+            return false;
+
+        for (int i = 0; i < hits.Length; i++)
+        {
+            Debug.Log(hits[i].transform.gameObject.name);
+            if (hits[i].transform == transform.parent && hits.Length == 1)
+                return false;
+
+        }
+
+        return true;
+    }
+
+    public void FreezeConstraints(bool status)
+    {
+        if (status)
+        {
+            boxRigidbody.constraints = RigidbodyConstraints.FreezeAll;
+        }
+        else
+        {
+            boxRigidbody.constraints = RigidbodyConstraints.None;
+            boxRigidbody.constraints = RigidbodyConstraints.FreezeRotation;
+        }
+    }
+
+    #endregion
 }
