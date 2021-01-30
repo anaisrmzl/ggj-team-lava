@@ -23,5 +23,13 @@ public class BoxMain : MonoBehaviour
         }
     }
 
+    private void OnCollisionEnter(Collision other)
+    {
+        if (other.transform.tag == "Ground")
+        {
+            Debug.Log("Water");
+        }
+    }
+
     #endregion
 }
