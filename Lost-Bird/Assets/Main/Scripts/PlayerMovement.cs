@@ -11,7 +11,7 @@ public class PlayerMovement : MonoBehaviour
 
     [Header("PLAYER MOVEMENT")]
     [SerializeField] private float playerSpeed = 2.0f;
-    //[SerializeField] private Animator animator = null;
+    [SerializeField] private Animator animator = null;
 
     [Header("PUSH")]
     [SerializeField] private float pushingSpeed = 3.0f;
@@ -19,7 +19,8 @@ public class PlayerMovement : MonoBehaviour
     [Header("JUMPS")]
     [SerializeField] private float shortLength = 2.0f;
     [SerializeField] private float longLength = 3.0f;
-    [SerializeField] private float jumpSpeed = 7.0f;
+    [SerializeField] private float shortJumpSpeed = 7.0f;
+    [SerializeField] private float longJumpSpeed = 7.0f;
 
     private Player playerInput = null;
     private new Rigidbody rigidbody = null;
@@ -34,6 +35,7 @@ public class PlayerMovement : MonoBehaviour
     private Vector3 elevationPosition;
     private Vector3 travelingPosition;
     private float travelLength = default(float);
+    private float jumpSpeed = default(float);
     private bool elevating = false;
     private bool traveling = false;
 
@@ -42,7 +44,8 @@ public class PlayerMovement : MonoBehaviour
     #region PROPERTIES
 
     public Vector2 MovementInput { get => playerInput.PlayerActions.Move.ReadValue<Vector2>(); }
-    public bool HasBird { get; private set; } = true;
+    public bool HasBird { get; private set; }
+    public bool CanMove { get => !elevating && !pushing && !traveling; }
 
     #endregion
 
@@ -52,12 +55,12 @@ public class PlayerMovement : MonoBehaviour
     {
         playerInput = new Player();
         rigidbody = GetComponent<Rigidbody>();
+        FreeBird();
     }
 
     private void OnEnable()
     {
         playerInput.Enable();
-        playerInput.PlayerActions.Move.started += action => StartedAction();
         playerInput.PlayerActions.Move.performed += action => PerformedAction();
         playerInput.PlayerActions.Move.canceled += action => CanceledAction();
     }
@@ -65,19 +68,23 @@ public class PlayerMovement : MonoBehaviour
     private void OnDisable()
     {
         playerInput.Disable();
-        playerInput.PlayerActions.Move.started -= action => StartedAction();
         playerInput.PlayerActions.Move.canceled -= action => CanceledAction();
         playerInput.PlayerActions.Move.performed -= action => PerformedAction();
     }
 
     private void FixedUpdate()
     {
+        if (!CanMove)
+            return;
+
         Vector3 move = new Vector3(MovementInput.x, 0, MovementInput.y);
         rigidbody.MovePosition(rigidbody.position + move * playerSpeed * Time.fixedDeltaTime);
     }
 
     private void Update()
     {
+        animator.SetFloat("speed", Mathf.Abs(MovementInput.x) + Mathf.Abs(MovementInput.y));
+
         if (pushing)
         {
             Push();
@@ -97,16 +104,11 @@ public class PlayerMovement : MonoBehaviour
         }
 
         if (playerInput.PlayerActions.LongJump.triggered)//Change to autoTrigger
-            SetElevation(transform.position + new Vector3(0.0f, HasBird ? 1.0f : 0.5f, 0.0f), HasBird ? longLength : shortLength);
+            SetElevation(transform.position + new Vector3(0.0f, HasBird ? 1.0f : 0.5f, 0.0f), HasBird ? longLength : shortLength, HasBird ? longJumpSpeed : shortJumpSpeed);
 
         Vector3 move = new Vector3(MovementInput.x, 0, MovementInput.y);
         if (move != Vector3.zero)
             gameObject.transform.forward = move;
-    }
-
-    private void StartedAction()
-    {
-        // animator.SetTrigger("walk");
     }
 
     private void PerformedAction()
@@ -117,15 +119,16 @@ public class PlayerMovement : MonoBehaviour
     private void CanceledAction()
     {
         changedDirection = true;
-        //animator.SetTrigger("hide");
     }
 
-    private void SetElevation(Vector3 elevation, float traveling)
+    private void SetElevation(Vector3 elevation, float traveling, float duration)
     {
         //if bird, change his animation
+        jumpSpeed = duration;
         elevationPosition = elevation;
         travelLength = traveling;
         elevating = true;
+        animator.SetBool("jump", elevating);
         rigidbody.useGravity = false;
     }
 
@@ -152,6 +155,7 @@ public class PlayerMovement : MonoBehaviour
             transform.position = travelingPosition;
             //if bird, change his animation
             rigidbody.useGravity = true;
+            animator.SetBool("jump", elevating);
         }
     }
 
@@ -166,10 +170,12 @@ public class PlayerMovement : MonoBehaviour
             movingBox.transform.parent.SetParent(null);
             if (!changedDirection && movingBox.CanPush(MovementInput))
                 PushObject(movingBox);
+            else
+                animator.SetBool("push", pushing);
         }
     }
 
-    public void PushObject(Box box)
+    private void PushObject(Box box)
     {
         changedDirection = false;
         Vector3 boxParentPosition = box.transform.parent.transform.position;
@@ -180,15 +186,28 @@ public class PlayerMovement : MonoBehaviour
         pushing = true;
     }
 
+    public void StartPushing(Box box)
+    {
+        PushObject(box);
+        animator.SetBool("push", pushing);
+    }
+
     public void LooseBird()
     {
         HasBird = false;
         UpdateBird();
     }
 
+    public void FreeBird()
+    {
+        HasBird = true;
+        UpdateBird();
+    }
+
     private void UpdateBird()
     {
         bird.SetActive(HasBird);
+        animator.SetBool("bird", HasBird);
     }
 
     #endregion

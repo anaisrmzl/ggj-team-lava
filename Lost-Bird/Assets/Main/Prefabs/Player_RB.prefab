@@ -140,10 +140,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bird: {fileID: 7243633562786538206}
   playerSpeed: 2
+  animator: {fileID: 6783023201223999126}
   pushingSpeed: 3
   shortLength: 2
   longLength: 3
-  jumpSpeed: 7
+  shortJumpSpeed: 5
+  longJumpSpeed: 2.5
 --- !u!96 &4724571998260789725
 TrailRenderer:
   serializedVersion: 2

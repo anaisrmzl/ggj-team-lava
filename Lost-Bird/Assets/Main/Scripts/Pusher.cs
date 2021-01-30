@@ -17,7 +17,7 @@ public class Pusher : MonoBehaviour
 
         Box box = other.GetComponent<Box>();
         if (box.CanPush(playerMovement.MovementInput))
-            playerMovement.PushObject(box);
+            playerMovement.StartPushing(box);
     }
 
     #endregion
