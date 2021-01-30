@@ -248,6 +248,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   opposite: {fileID: 3604966672350365946}
   boxSide: 3
+  boxMain: {fileID: 2444531086181395182}
   origin: {x: 1, y: 0, z: 0}
 --- !u!1 &2731120497339884575
 GameObject:
@@ -365,6 +366,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   opposite: {fileID: 5142572890800336510}
   boxSide: 1
+  boxMain: {fileID: 2444531086181395182}
   origin: {x: 0, y: 0, z: -1}
 --- !u!1 &3312653915063350381
 GameObject:
@@ -482,6 +484,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   opposite: {fileID: 859978487164195510}
   boxSide: 0
+  boxMain: {fileID: 2444531086181395182}
   origin: {x: 0, y: 0, z: 1}
 --- !u!1 &7064086703996597422
 GameObject:
@@ -599,4 +602,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   opposite: {fileID: 4846009901633033762}
   boxSide: 2
+  boxMain: {fileID: 2444531086181395182}
   origin: {x: -1, y: 0, z: 0}

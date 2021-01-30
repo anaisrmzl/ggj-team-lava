@@ -6,7 +6,7 @@ public class Box : MonoBehaviour
 
     [SerializeField] private Box opposite = null;
     [SerializeField] private BoxSide boxSide;
-    // [SerializeField] private Rigidbody boxRigidbody;
+    [SerializeField] private BoxMain boxMain;
     [SerializeField] private Vector3 origin;
 
     private float minForce = 0.8f;
@@ -62,6 +62,30 @@ public class Box : MonoBehaviour
         }
 
         return true;
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.transform.tag != "Ground" && boxSide == BoxSide.Left)
+        {
+            boxMain.Colliding = true;
+        }
+    }
+
+    private void OnTriggerStay(Collider other)
+    {
+        if (other.transform.tag != "Ground" && boxSide == BoxSide.Left && !boxMain.Colliding)
+        {
+            boxMain.Colliding = true;
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.transform.tag != "Ground" && boxSide == BoxSide.Left)
+        {
+            boxMain.Colliding = false;
+        }
     }
 
     #endregion
