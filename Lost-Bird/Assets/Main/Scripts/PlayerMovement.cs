@@ -11,6 +11,8 @@ public class PlayerMovement : MonoBehaviour
 
     [Inject] private SoundManager soundManager;
 
+    [SerializeField] private TransitionLevels transitionLevels = null;
+
     [Header("AUDIOS")]
     [SerializeField] private AudioClip walkSound = null;
     [SerializeField] private AudioClip jumpWithBirdSound = null;
@@ -38,6 +40,8 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float shortJumpSpeed = 7.0f;
     [SerializeField] private float longJumpSpeed = 7.0f;
     [SerializeField] private float maxTravelTime = 2.0f;
+
+    private bool win = false;
 
     private Player playerInput = null;
     private new Rigidbody rigidbody = null;
@@ -100,7 +104,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (!CanMove)
+        if (!CanMove || win)
             return;
 
         Vector3 move = new Vector3(MovementInput.x, 0, MovementInput.y);
@@ -109,6 +113,9 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
+        if (win)
+            return;
+
         animator.SetFloat("speed", startedPushing ? 0.0f : Mathf.Abs(MovementInput.x) + Mathf.Abs(MovementInput.y));
         birdAnimator.SetFloat("speed", startedPushing ? 0.0f : Mathf.Abs(MovementInput.x) + Mathf.Abs(MovementInput.y));
 
@@ -298,6 +305,15 @@ public class PlayerMovement : MonoBehaviour
 
         BoxMain box = other.gameObject.GetComponent<BoxMain>();
         box.FreezeConstraints(false);
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.transform.tag == "Win" && !win)
+        {
+            win = true;
+            transitionLevels.NextLevelScreenTransition();
+        }
     }
 
     #endregion

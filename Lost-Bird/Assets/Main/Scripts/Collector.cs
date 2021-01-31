@@ -39,6 +39,11 @@ public class Collector : MonoBehaviour
         keyObject.SetActive(key);
     }
 
+    private void Start()
+    {
+        onUpdateUI?.Invoke();
+    }
+
     private void OnCollisionEnter(Collision other)
     {
         if (other.gameObject.tag == "Feather")
