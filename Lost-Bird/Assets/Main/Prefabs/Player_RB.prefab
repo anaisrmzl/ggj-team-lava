@@ -250,7 +250,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   walkSound: {fileID: 8300000, guid: 9e15bbc6468db44f0baad8433760278c, type: 3}
   jumpWithBirdSound: {fileID: 8300000, guid: d524655106ae842de91811fe9813e1ff, type: 3}
+  jumpAloneSound: {fileID: 8300000, guid: d1b53024a62834dc8b39c65a95ec42ea, type: 3}
   pushSound: {fileID: 8300000, guid: 054ddba59a53048ad8d8d9ea8be5217a, type: 3}
+  respawnSound: {fileID: 8300000, guid: 8bf61db57b9ba498084ca41bc2b13fba, type: 3}
   bird: {fileID: 919947519827350530}
   collector: {fileID: 8521571968300323078}
   birdAnimator: {fileID: 8407003755643788326}

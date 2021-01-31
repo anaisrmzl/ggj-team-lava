@@ -14,7 +14,9 @@ public class PlayerMovement : MonoBehaviour
     [Header("AUDIOS")]
     [SerializeField] private AudioClip walkSound = null;
     [SerializeField] private AudioClip jumpWithBirdSound = null;
+    [SerializeField] private AudioClip jumpAloneSound = null;
     [SerializeField] private AudioClip pushSound = null;
+    [SerializeField] private AudioClip respawnSound = null;
 
     [Header("BIRD")]
     [SerializeField] private GameObject bird = null;
@@ -74,6 +76,7 @@ public class PlayerMovement : MonoBehaviour
         playerInput = new Player();
         rigidbody = GetComponent<Rigidbody>();
         LooseBird();
+        soundManager.PlayEffectOneShot(respawnSound);
     }
 
     private void OnEnable()
@@ -171,8 +174,7 @@ public class PlayerMovement : MonoBehaviour
         animator.SetBool("jump", elevating);
         birdAnimator.SetBool("jump", elevating);
         rigidbody.useGravity = false;
-        if (HasBird)
-            soundManager.PlayVoice(jumpWithBirdSound);
+        soundManager.PlayVoice(HasBird ? jumpWithBirdSound : jumpAloneSound);
     }
 
     private void Elevate()

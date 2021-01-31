@@ -12,6 +12,7 @@ public class BoxMain : MonoBehaviour
 
     [SerializeField] private AudioClip splashSound;
     [SerializeField] private Rigidbody boxRigidbody;
+    [SerializeField] private bool silenceOnStart = false;
 
     private bool inWater = false;
     private bool waterFlow = false;
@@ -51,7 +52,9 @@ public class BoxMain : MonoBehaviour
         if (other.transform.tag == "Ground" && !inWater)
         {
             inWater = true;
-            soundManager.PlayEffectOneShot(splashSound);
+            if (!silenceOnStart)
+                soundManager.PlayEffect(splashSound);
+
             StartCoroutine(WaterFlow());
         }
     }
