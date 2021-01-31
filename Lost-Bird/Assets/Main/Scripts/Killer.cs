@@ -6,6 +6,7 @@ public class Killer : MonoBehaviour
 {
     private void OnTriggerEnter(Collider other)
     {
-        Destroy(other.gameObject);
+        if (other.transform.tag != "Player")
+            Destroy(other.gameObject);
     }
 }

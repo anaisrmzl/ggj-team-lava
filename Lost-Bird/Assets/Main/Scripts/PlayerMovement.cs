@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 
 using Zenject;
 using Utilities.Sound;
@@ -10,6 +11,7 @@ public class PlayerMovement : MonoBehaviour
     private const float MinMovingDistance = 0.001f;
 
     [Inject] private SoundManager soundManager;
+    [Inject] private Respawn respawn = null;
 
     [SerializeField] private TransitionLevels transitionLevels = null;
 
@@ -61,6 +63,7 @@ public class PlayerMovement : MonoBehaviour
     private bool traveling = false;
     private float travelTimer = 0.0f;
     private Vector3 currentEdgeCenter;
+    private bool grounded = true;
 
     #endregion
 
@@ -68,7 +71,7 @@ public class PlayerMovement : MonoBehaviour
 
     public Vector2 MovementInput { get => playerInput.PlayerActions.Move.ReadValue<Vector2>(); }
     public bool HasBird { get; private set; }
-    public bool CanMove { get => !elevating && !pushing && !traveling && !startedPushing; }
+    public bool CanMove { get => !elevating && !pushing && !traveling && !startedPushing && grounded; }
     public bool IsJumping { get => elevating || traveling; }
     public bool CanPush { get => !startedPushing; }
 
@@ -104,7 +107,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (!CanMove || win)
+        if (!CanMove || win || respawn.Died)
             return;
 
         Vector3 move = new Vector3(MovementInput.x, 0, MovementInput.y);
@@ -113,7 +116,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
-        if (win)
+        if (win || respawn.Died)
             return;
 
         animator.SetFloat("speed", startedPushing ? 0.0f : Mathf.Abs(MovementInput.x) + Mathf.Abs(MovementInput.y));
@@ -182,6 +185,7 @@ public class PlayerMovement : MonoBehaviour
         elevationPosition = elevation;
         travelLength = traveling;
         elevating = true;
+        grounded = false;
         travelTimer = 0.0f;
         animator.SetBool("jump", elevating);
         birdAnimator.SetBool("jump", elevating);
@@ -227,6 +231,13 @@ public class PlayerMovement : MonoBehaviour
         travelTimer = 0.0f;
         animator.SetBool("jump", elevating);
         birdAnimator.SetBool("jump", elevating);
+        StartCoroutine(GroundPlayer());
+    }
+
+    private IEnumerator GroundPlayer()
+    {
+        yield return new WaitForSeconds(0.5f);
+        grounded = true;
     }
 
     private void Push()
@@ -311,6 +322,7 @@ public class PlayerMovement : MonoBehaviour
         if (other.transform.tag == "Win" && !win)
         {
             win = true;
+            PlayerPrefs.SetInt("Feathers", PlayerPrefs.GetInt("Feathers") + collector.Feathers);
             transitionLevels.NextLevelScreenTransition();
         }
     }

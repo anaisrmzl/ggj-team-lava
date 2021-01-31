@@ -27,8 +27,8 @@ public class TransitionMenu : MonoBehaviour
         transitionTime = new WaitForSeconds(transition.duration);
         StartCoroutine(TransitionTimer());
     }
-    
-    
+
+
     public void TransitionCredits()
     {
         transition.reverse = true;
@@ -47,6 +47,9 @@ public class TransitionMenu : MonoBehaviour
 
     IEnumerator TransitionTimer()
     {
+        if (PlayerPrefs.HasKey("Feathers"))
+            PlayerPrefs.SetInt("Feathers", 0);
+
         yield return transitionTime;
         SceneManager.LoadScene("Map1");
     }
@@ -54,7 +57,7 @@ public class TransitionMenu : MonoBehaviour
     IEnumerator TransitionTimerCredits()
     {
         yield return transitionTime;
-       
+
         credits.SetActive(true);
         creditsTransition.reverse = false;
         creditsTransition.Play();
@@ -66,6 +69,6 @@ public class TransitionMenu : MonoBehaviour
         credits.SetActive(false);
         transition.reverse = false;
         transition.Play();
-        
+
     }
 }

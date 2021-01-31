@@ -16,10 +16,15 @@ public class UIDisplay : MonoBehaviour
     void Start()
     {
         if (collector == null)
+        {
+            feathers.text = "Feathers: " + PlayerPrefs.GetInt("Feathers").ToString() + "/" + max_feathers.ToString();
             return;
+        }
 
-        max_feathers = 10;
-        feathers.text = collector.Feathers.ToString() + "/" + max_feathers;
+        if (SceneManager.GetActiveScene().name == "Map1") max_feathers = 4;
+        else if (SceneManager.GetActiveScene().name == "Map2") max_feathers = 6;
+
+        feathers.text = "Feathers: " + collector.Feathers.ToString() + "/" + max_feathers.ToString();
     }
 
     public void GoToScreen(string _name)

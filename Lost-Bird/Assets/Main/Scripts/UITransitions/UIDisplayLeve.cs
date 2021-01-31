@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -13,8 +13,8 @@ public class UIDisplayLeve : MonoBehaviour
     private Text feathers;
     [SerializeField]
     private GameObject key;
-    [SerializeField]
-    private int max_feathers, timesCaught;
+
+    private int max_feathers;
 
     private void Awake()
     {
@@ -27,7 +27,7 @@ public class UIDisplayLeve : MonoBehaviour
         if (SceneManager.GetActiveScene().name == "Map1") max_feathers = 4;
         else if (SceneManager.GetActiveScene().name == "Map2") max_feathers = 6;
 
-        feathers.text = collector.Feathers.ToString() + "/" + max_feathers;
+        feathers.text = collector.Feathers.ToString() + "/" + max_feathers.ToString();
         key.SetActive(collector.HasKey);
     }
 

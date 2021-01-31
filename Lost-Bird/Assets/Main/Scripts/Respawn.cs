@@ -11,11 +11,11 @@ public class Respawn : MonoBehaviour
 
     [SerializeField] private AudioClip splashSound = null;
 
-    private bool died = false;
+    public bool Died { get; private set; } = false;
 
-    private void OnTriggerEnter(Collider other)
+    private void OnCollisionEnter(Collision other)
     {
-        if (died)
+        if (Died)
             return;
 
         soundManager.PlayVoice(splashSound);
@@ -24,7 +24,7 @@ public class Respawn : MonoBehaviour
 
     private IEnumerator Revive()
     {
-        died = true;
+        Died = true;
         yield return new WaitForSeconds(1.0f);
         ResetScene();
     }

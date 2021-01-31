@@ -15,6 +15,7 @@ public class Collector : MonoBehaviour
     [SerializeField] private GameObject keyObject = null;
 
     private int feathers = default(int);
+    private int totalFeathers = default(int);
     private bool key = false;
 
     #endregion
@@ -28,6 +29,7 @@ public class Collector : MonoBehaviour
     #region PROPERTIES
 
     public int Feathers { get => feathers; }
+    public int TotalFeathers { get => totalFeathers; }
     public bool HasKey { get => key; }
 
     #endregion
@@ -36,6 +38,7 @@ public class Collector : MonoBehaviour
 
     private void Awake()
     {
+        totalFeathers = PlayerPrefs.GetInt("Feathers", 0);
         keyObject.SetActive(key);
     }
 

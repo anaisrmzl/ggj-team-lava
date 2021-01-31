@@ -22,10 +22,16 @@ public class BoxMain : MonoBehaviour
 
     #region BEHAVIORS
 
+    private void Start()
+    {
+        Colliding = false;
+    }
+
     private void Update()
     {
         if (waterFlow && !Colliding)
             boxRigidbody.velocity = new Vector3(-5.0f, 0.0f, 0.0f);
+
         /*boxRigidbody.MovePosition(boxRigidbody.position + Vector3.left * Time.fixedDeltaTime);*/
     }
 
