@@ -11,11 +11,6 @@ public class Edge : MonoBehaviour
 
     #region BEHAVIORS
 
-    private void Update()
-    {
-        Debug.DrawRay(transform.parent.transform.position, transform.TransformDirection(Vector3.forward) * 1, Color.green);
-    }
-
     public bool AreThereObjects()
     {
         RaycastHit[] hits;

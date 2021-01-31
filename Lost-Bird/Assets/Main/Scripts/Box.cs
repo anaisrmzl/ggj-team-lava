@@ -67,25 +67,19 @@ public class Box : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         if (other.transform.tag != "Ground" && boxSide == BoxSide.Left)
-        {
             boxMain.Colliding = true;
-        }
     }
 
     private void OnTriggerStay(Collider other)
     {
         if (other.transform.tag != "Ground" && boxSide == BoxSide.Left && !boxMain.Colliding)
-        {
             boxMain.Colliding = true;
-        }
     }
 
     private void OnTriggerExit(Collider other)
     {
         if (other.transform.tag != "Ground" && boxSide == BoxSide.Left)
-        {
             boxMain.Colliding = false;
-        }
     }
 
     #endregion

@@ -47,7 +47,6 @@ public class Follow : MonoBehaviour
 
         }
 
-
         if (chasingPlayer)
         {
             navMeshAgent.SetDestination(player.transform.position);
@@ -60,8 +59,7 @@ public class Follow : MonoBehaviour
                 navMeshAgent.SetDestination(moveSpots[randomSpot].transform.position);
             }
         }
-
-
     }
+
     #endregion
 }

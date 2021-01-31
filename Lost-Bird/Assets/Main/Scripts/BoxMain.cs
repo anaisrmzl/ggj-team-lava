@@ -31,8 +31,6 @@ public class BoxMain : MonoBehaviour
     {
         if (waterFlow && !Colliding)
             boxRigidbody.velocity = new Vector3(-5.0f, 0.0f, 0.0f);
-
-        /*boxRigidbody.MovePosition(boxRigidbody.position + Vector3.left * Time.fixedDeltaTime);*/
     }
 
     public void FreezeConstraints(bool status)

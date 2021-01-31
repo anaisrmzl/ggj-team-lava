@@ -38,6 +38,7 @@ public class Patrol : MonoBehaviour
 
         transform.position = Vector3.MoveTowards(transform.position, moveSpots[spot].position, speed * Time.deltaTime);
         if (Vector3.Distance(transform.position, moveSpots[spot].position) < 0.001f)
+        {
             if (waitTime <= 0)
             {
                 spot = spot == moveSpots.Length - 1 ? 0 : spot + 1;
@@ -48,6 +49,7 @@ public class Patrol : MonoBehaviour
                 rotationSpot = spot == moveSpots.Length - 1 ? 0 : spot + 1;
                 waitTime -= Time.deltaTime;
             }
+        }
     }
 
     #endregion
