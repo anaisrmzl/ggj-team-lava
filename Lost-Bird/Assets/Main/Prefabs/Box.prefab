@@ -115,6 +115,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9e4a58c0b2b3a4880999cbcca21785fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  splashSound: {fileID: 8300000, guid: 14af76f05ffe14953af0e011de75815a, type: 3}
   boxRigidbody: {fileID: 412171172959114264}
 --- !u!54 &412171172959114264
 Rigidbody:

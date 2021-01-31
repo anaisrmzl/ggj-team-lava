@@ -65,7 +65,7 @@ Transform:
   m_GameObject: {fileID: 3053764158192174597}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 3308913378965808699}
   m_Father: {fileID: 3053764159036213956}
@@ -100,6 +100,9 @@ MonoBehaviour:
   animator: {fileID: 3053764160102775425}
   hasBird: 0
   bird: {fileID: 2783311995425026784}
+  key: {fileID: 0}
+  captureSound: {fileID: 8300000, guid: b73309d4563434b2dade33a74254ad65, type: 3}
+  freeSound: {fileID: 8300000, guid: 8b6c42ca4030a4c2b9c6d7f3d549e5a5, type: 3}
 --- !u!1 &3053764159036213957
 GameObject:
   m_ObjectHideFlags: 0

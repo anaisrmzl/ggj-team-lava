@@ -1,10 +1,20 @@
 ﻿using UnityEngine;
 
+using Zenject;
+using Utilities.Sound;
+
 public class PlayerMovement : MonoBehaviour
 {
     #region FIELDS
 
     private const float MinMovingDistance = 0.001f;
+
+    [Inject] private SoundManager soundManager;
+
+    [Header("AUDIOS")]
+    [SerializeField] private AudioClip walkSound = null;
+    [SerializeField] private AudioClip jumpWithBirdSound = null;
+    [SerializeField] private AudioClip pushSound = null;
 
     [Header("BIRD")]
     [SerializeField] private GameObject bird = null;
@@ -51,7 +61,7 @@ public class PlayerMovement : MonoBehaviour
 
     public Vector2 MovementInput { get => playerInput.PlayerActions.Move.ReadValue<Vector2>(); }
     public bool HasBird { get; private set; }
-    public bool CanMove { get => !elevating && !pushing && !traveling; }
+    public bool CanMove { get => !elevating && !pushing && !traveling && !startedPushing; }
     public bool IsJumping { get => elevating || traveling; }
     public bool CanPush { get => !startedPushing; }
 
@@ -85,16 +95,12 @@ public class PlayerMovement : MonoBehaviour
         if (!CanMove)
             return;
 
-        if (startedPushing)
-            return;
-
         Vector3 move = new Vector3(MovementInput.x, 0, MovementInput.y);
         rigidbody.MovePosition(rigidbody.position + move * playerSpeed * Time.fixedDeltaTime);
     }
 
     private void Update()
     {
-
         animator.SetFloat("speed", startedPushing ? 0.0f : Mathf.Abs(MovementInput.x) + Mathf.Abs(MovementInput.y));
         birdAnimator.SetFloat("speed", startedPushing ? 0.0f : Mathf.Abs(MovementInput.x) + Mathf.Abs(MovementInput.y));
 
@@ -142,12 +148,17 @@ public class PlayerMovement : MonoBehaviour
     private void CanceledAction()
     {
         startedPushing = false;
+        if (CanMove)
+            soundManager.StopVoice();
     }
 
     private void StartedAction()
     {
         if (movingBox != null && movingBox == pusher.CollidingBox)
             pusher.TryPush(movingBox, transform.forward);
+
+        if (CanMove)
+            soundManager.PlayVoice(walkSound, true);
     }
 
     private void SetElevation(Vector3 elevation, float traveling, float duration)
@@ -160,6 +171,8 @@ public class PlayerMovement : MonoBehaviour
         animator.SetBool("jump", elevating);
         birdAnimator.SetBool("jump", elevating);
         rigidbody.useGravity = false;
+        if (HasBird)
+            soundManager.PlayVoice(jumpWithBirdSound);
     }
 
     private void Elevate()
@@ -206,6 +219,7 @@ public class PlayerMovement : MonoBehaviour
     {
         float step = pushingSpeed * Time.deltaTime;
         transform.position = Vector3.MoveTowards(transform.position, endPosition, step);
+        Debug.Log((Vector3.Distance(transform.position, endPosition)));
         if (Vector3.Distance(transform.position, endPosition) < MinMovingDistance)
         {
             pushing = false;
@@ -228,6 +242,7 @@ public class PlayerMovement : MonoBehaviour
     public void StartPushing(Box box)
     {
         startedPushing = true;
+        soundManager.PlayVoice(pushSound);
         PushObject(box);
         animator.SetBool("push", pushing);
     }

@@ -1,14 +1,21 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+
+using Zenject;
+using Utilities.Sound;
 
 public class Enemy : MonoBehaviour
 {
     #region FIELDS
 
+    [Inject] private SoundManager soundManager;
+
     [SerializeField] private Animator animator = null;
     [SerializeField] private bool hasBird = false;
     [SerializeField] private GameObject bird = null;
+    [SerializeField] private GameObject key = null;
+    [SerializeField] private AudioClip captureSound = null;
+    [SerializeField] private AudioClip freeSound = null;
 
     #endregion
 
@@ -25,6 +32,7 @@ public class Enemy : MonoBehaviour
     {
         bird.SetActive(hasBird);
         animator.SetBool("active", IsActive);
+        key.SetActive(hasBird);
     }
 
     private void OnCollisionEnter(Collision other)
@@ -42,15 +50,21 @@ public class Enemy : MonoBehaviour
             }
             else
             {
-                hasBird = true;
-                bird.SetActive(hasBird);
-                player.LooseBird();
+                if (player.HasBird)
+                {
+                    hasBird = true;
+                    bird.SetActive(hasBird);
+                    key.SetActive(hasBird);
+                    soundManager.PlayEffectOneShot(captureSound);
+                    player.LooseBird();
+                }
             }
         }
     }
 
     private IEnumerator StayInactive()
     {
+        soundManager.PlayEffectOneShot(freeSound);
         hasBird = false;
         bird.SetActive(hasBird);
         IsActive = false;
