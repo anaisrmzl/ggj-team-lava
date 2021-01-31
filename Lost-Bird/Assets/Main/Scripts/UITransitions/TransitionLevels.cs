@@ -42,6 +42,7 @@ public class TransitionLevels : MonoBehaviour
     IEnumerator TransitionTimer()
     {
         yield return transitionTime;
+
         UI.Next();
     }
 

@@ -7,7 +7,7 @@ using UnityEngine.SceneManagement;
 public class UIDisplay : MonoBehaviour
 {
     [SerializeField]
-    private Collector collector;
+    private Collector collector = null;
     [SerializeField]
     private int max_feathers;
     [SerializeField]
@@ -15,6 +15,9 @@ public class UIDisplay : MonoBehaviour
 
     void Start()
     {
+        if (collector == null)
+            return;
+
         max_feathers = 10;
         feathers.text = collector.Feathers.ToString() + "/" + max_feathers;
     }

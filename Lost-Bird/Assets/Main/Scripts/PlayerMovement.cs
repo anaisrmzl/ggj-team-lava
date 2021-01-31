@@ -233,7 +233,6 @@ public class PlayerMovement : MonoBehaviour
     {
         float step = pushingSpeed * Time.deltaTime;
         transform.position = Vector3.MoveTowards(transform.position, endPosition, step);
-        Debug.Log((Vector3.Distance(transform.position, endPosition)));
         if (Vector3.Distance(transform.position, endPosition) < MinMovingDistance)
         {
             pushing = false;
