@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 412171172959114264}
   m_Layer: 11
   m_Name: Box
-  m_TagString: Untagged
+  m_TagString: Box
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -69,6 +69,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   splashSound: {fileID: 8300000, guid: 14af76f05ffe14953af0e011de75815a, type: 3}
   boxRigidbody: {fileID: 412171172959114264}
+  silenceOnStart: 0
 --- !u!54 &412171172959114264
 Rigidbody:
   m_ObjectHideFlags: 0

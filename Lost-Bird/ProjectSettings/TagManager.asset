@@ -9,6 +9,7 @@ TagManager:
   - Feather
   - Ground
   - Win
+  - Box
   layers:
   - Default
   - TransparentFX
