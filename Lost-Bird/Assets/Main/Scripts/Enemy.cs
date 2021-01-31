@@ -6,7 +6,9 @@ public class Enemy : MonoBehaviour
 {
     #region FIELDS
 
+    [SerializeField] private Animator animator = null;
     [SerializeField] private bool hasBird = false;
+    [SerializeField] private GameObject bird = null;
 
     #endregion
 
@@ -18,6 +20,12 @@ public class Enemy : MonoBehaviour
     #endregion
 
     #region BEHAVIORS
+
+    private void Awake()
+    {
+        bird.SetActive(hasBird);
+        animator.SetBool("active", IsActive);
+    }
 
     private void OnCollisionEnter(Collision other)
     {
@@ -35,6 +43,7 @@ public class Enemy : MonoBehaviour
             else
             {
                 hasBird = true;
+                bird.SetActive(hasBird);
                 player.LooseBird();
             }
         }
@@ -43,9 +52,12 @@ public class Enemy : MonoBehaviour
     private IEnumerator StayInactive()
     {
         hasBird = false;
+        bird.SetActive(hasBird);
         IsActive = false;
+        animator.SetBool("active", IsActive);
         yield return new WaitForSeconds(5.0f);
         IsActive = true;
+        animator.SetBool("active", IsActive);
     }
 
     #endregion
