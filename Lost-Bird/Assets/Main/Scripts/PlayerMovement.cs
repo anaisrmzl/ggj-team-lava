@@ -22,6 +22,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private GameObject bird = null;
     [SerializeField] private Collector collector = null;
     [SerializeField] private Animator birdAnimator = null;
+    [SerializeField] private bool startWithBird = false;
 
     [Header("PLAYER MOVEMENT")]
     [SerializeField] private float playerSpeed = 2.0f;
@@ -75,7 +76,11 @@ public class PlayerMovement : MonoBehaviour
     {
         playerInput = new Player();
         rigidbody = GetComponent<Rigidbody>();
-        LooseBird();
+        if (startWithBird)
+            AppearBird();
+        else
+            LooseBird();
+
         soundManager.PlayEffectOneShot(respawnSound);
     }
 
@@ -255,14 +260,19 @@ public class PlayerMovement : MonoBehaviour
         UpdateBird();
     }
 
+    public void AppearBird()
+    {
+        HasBird = true;
+        UpdateBird();
+    }
+
     public bool FreeBird()
     {
         if (!collector.HasKey)
             return false;
 
-        HasBird = true;
+        AppearBird();
         collector.UseKey();
-        UpdateBird();
         return true;
     }
 
